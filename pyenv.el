@@ -127,7 +127,8 @@
   (message (concat "[pyenv] using " python-version)))
 
 (defun pyenv/list ()
-  (split-string (pyenv--call-process "versions" "--bare") "\n"))
+  (append '("system")
+          (split-string (pyenv--call-process "versions" "--bare") "\n")))
 
 (defun pyenv--setup ()
   (when (not pyenv--initialized)
@@ -156,7 +157,9 @@
   (funcall pyenv-interactive-completion-function prompt options))
 
 (defun pyenv--global-python-version ()
-  (pyenv--read-version-from-file pyenv-global-version-file))
+  (if (file-exists-p pyenv-global-version-file)
+      (pyenv--read-version-from-file pyenv-global-version-file)
+    "system"))
 
 (defun pyenv--read-version-from-file (path)
   (with-temp-buffer
