@@ -147,10 +147,12 @@
         (setenv "PATH" (replace-regexp-in-string (regexp-quote (concat bin-path ":")) "" (getenv "PATH")))
         (setq exec-path (remove bin-path exec-path))))
     (setq eshell-path-env (getenv "PATH"))
+    (setq python-shell-virtualenv-root nil)
     (setq pyenv--initialized nil)))
 
 (defun pyenv--activate (python-version)
   (setenv pyenv-version-environment-variable python-version)
+  (setq python-shell-virtualenv-root (pyenv--expand-path "versions" python-version))
   (pyenv--update-mode-line))
 
 (defun pyenv--completing-read (prompt options)
